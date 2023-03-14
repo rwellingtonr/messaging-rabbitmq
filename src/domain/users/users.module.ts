@@ -10,6 +10,7 @@ import { BullModule } from '@nestjs/bull';
 import { sendMailConsumer } from './jobs/send-email-consumer';
 import { GetImageByUserId } from './use-cases/getImageByUserId';
 import { RemoveAvatar } from './use-cases/remove.avatar';
+import { ClientsModule, Transport } from '@nestjs/microservices';
 
 @Module({
   controllers: [UsersController],
@@ -19,6 +20,21 @@ import { RemoveAvatar } from './use-cases/remove.avatar';
     BullModule.registerQueue({
       name: 'sendMail-queue',
     }),
+    ClientsModule.register([
+      {
+        name: 'MESSAGE',
+        transport: Transport.RMQ,
+        options: {
+          urls: [
+            'amqps://ottfggxd:ghpAsKbWQGQ7teGNiqRTw8QMDOAbSHXg@jackal.rmq.cloudamqp.com/ottfggxd',
+          ],
+          queue: 'send_event',
+          queueOptions: {
+            durable: false,
+          },
+        },
+      },
+    ]),
   ],
   providers: [
     CreateUser,

@@ -26,6 +26,7 @@ import { RepositoryModule } from './infra/repository/repositoty.module';
         },
       },
     }),
+
     UsersModule,
     GatewayModule,
     MongooseModule.forRoot(process.env.MONGO_STRING),
