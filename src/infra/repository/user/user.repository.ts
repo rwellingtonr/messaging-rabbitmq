@@ -1,6 +1,6 @@
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
-import { User, UserProps } from '~/domain/users/entities/user.entity';
+import { User } from '~/domain/users/entities/user.entity';
 import {
   type UserDocument,
   User as UserSchema,
