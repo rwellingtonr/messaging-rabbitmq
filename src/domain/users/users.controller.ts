@@ -8,7 +8,8 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
-
+import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { UserPresentationResponse } from './presentation/user.presentation';
 import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { userPresentation } from './presentation/user.presentation';
@@ -17,6 +18,7 @@ import { GetImageByUserId } from './use-cases/getImageByUserId';
 import { GetUserById } from './use-cases/getUserById';
 import { RemoveAvatar } from './use-cases/remove.avatar';
 
+@ApiTags('Users')
 @Controller('api')
 export class UsersController {
   constructor(
@@ -26,6 +28,8 @@ export class UsersController {
     private readonly removeAvatar: RemoveAvatar,
   ) {}
 
+  @ApiResponse({ status: 201, description: 'User created' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
   @Post('users')
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
     try {
@@ -38,6 +42,12 @@ export class UsersController {
     }
   }
 
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+  })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   @Get('user/:id')
   async findOne(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -47,7 +57,9 @@ export class UsersController {
       res.status(error?.status || 400).json({ message: error.message });
     }
   }
-
+  @ApiResponse({ status: 200, description: 'OK' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   @Get('user/:id/avatar')
   async findAll(@Param('id') id: string, @Res() res: Response) {
     try {
@@ -57,7 +69,9 @@ export class UsersController {
       res.status(error?.status || 400).json({ message: error?.message });
     }
   }
-
+  @ApiResponse({ status: 200, description: 'OK' })
+  @ApiResponse({ status: 400, description: 'Bad request' })
+  @ApiResponse({ status: 404, description: 'Not Found' })
   @Delete('user/:id/avatar')
   async remove(@Param('id') id: string, @Res() res: Response) {
     try {
