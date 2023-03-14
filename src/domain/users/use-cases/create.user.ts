@@ -1,4 +1,6 @@
+import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
+import { Queue } from 'bull';
 import { IUserRepository } from '~/infra/repository/user/IUserRepository';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Email } from '../entities/email.entity';
@@ -11,7 +13,10 @@ interface CreateUserResponse {
 
 @Injectable()
 export class CreateUser {
-  constructor(private readonly userRepository: IUserRepository) {}
+  constructor(
+    private readonly userRepository: IUserRepository,
+    @InjectQueue('sendMail-queue') private queue: Queue,
+  ) {}
 
   async execute(createUserDto: CreateUserDto): Promise<CreateUserResponse> {
     const user = new User({
@@ -22,7 +27,10 @@ export class CreateUser {
 
     user.createUser();
     const userCreated = await this.userRepository.create(user);
-
+    await this.queue.add('sendMail-job', {
+      email: user.email.value,
+      firstName: user.firstName.value,
+    });
     return {
       user: userCreated,
     };

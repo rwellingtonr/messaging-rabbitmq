@@ -1,4 +1,6 @@
+import { InjectQueue } from '@nestjs/bull';
 import { Controller, Get, Post, Body, Param, Delete } from '@nestjs/common';
+import { Queue } from 'bull';
 import { CreateUserDto } from './dto/create-user.dto';
 import {
   userPresentation,

@@ -17,3 +17,15 @@ services:
     image: mongo
     ports:
       - '27017:27017'
+
+  cache:
+    image: redis:7-alpine
+    restart: always
+    ports:
+      - '6379:6379'
+    command: redis-server
+    volumes:
+      - cache:/data
+volumes:
+  cache:
+    driver: local
