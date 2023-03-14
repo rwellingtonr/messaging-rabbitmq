@@ -4,8 +4,8 @@
 
 - CREATE: create an user an send an email and send a RabbitMQ event.
 - GET by id: retrieve the user from https://reqres.in
-- GET avatar: retrieve the user from https://reqres.in and save the image content as base64 in the system
-- REMOVE avatar: remove the avatar from an exiting user
+- GET avatar: retrieve the user from https://reqres.in and save the image content as base64 in the database and local
+- REMOVE avatar: remove the avatar from an exiting user and delete the local file
 
 ## Manually test
 
