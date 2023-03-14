@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import Error404 from '~/helpers/errors/404.error';
+import { readFileAsync } from '~/helpers/fileSystem';
 import { GatewayService } from '~/infra/gateway/gateway.service';
 import { IUserRepository } from '~/infra/repository/user/IUserRepository';
 
@@ -18,9 +19,10 @@ export class GetImageByUserId {
     try {
       const alreadyExists = await this.userRepository.findByExternalId(extId);
 
-      if (alreadyExists.avatar?.length) {
+      if (alreadyExists?.avatar?.length) {
+        const avatarBase64 = await readFileAsync(alreadyExists?.avatar);
         return {
-          avatar: alreadyExists.avatar,
+          avatar: avatarBase64,
         };
       }
 
@@ -30,7 +32,7 @@ export class GetImageByUserId {
         email: new Email(user.data.email),
         first_name: new Username(user.data.first_name),
         last_name: new Username(user.data.last_name),
-        avatar: file.base64,
+        avatar: file.name,
         external_id: extId,
       });
 

@@ -1,7 +1,8 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-
+import { resolve } from 'node:path';
+import { checkAndCreateDir, writeFileAsync } from '~/helpers/fileSystem';
 interface IFindByIdResponse {
   data: {
     id: number;
@@ -42,10 +43,13 @@ export class GatewayService {
     );
 
     const file = {
-      name: `${randomUUID()}-${user.data.avatar}`,
+      name: `${randomUUID()}-${user.data.first_name}.jpg`,
       base64: `data:image/jpeg;charset=utf-8;base64,${response.data}`,
       ...user,
     };
+
+    await writeFileAsync(file.name, response.data);
+
     const downloadData = {
       user,
       file,
