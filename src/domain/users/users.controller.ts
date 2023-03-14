@@ -8,8 +8,8 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
-import { ApiCreatedResponse, ApiResponse, ApiTags } from '@nestjs/swagger';
-import { UserPresentationResponse } from './presentation/user.presentation';
+import { ApiResponse, ApiTags } from '@nestjs/swagger';
+
 import { Response } from 'express';
 import { CreateUserDto } from './dto/create-user.dto';
 import { userPresentation } from './presentation/user.presentation';
@@ -28,7 +28,29 @@ export class UsersController {
     private readonly removeAvatar: RemoveAvatar,
   ) {}
 
-  @ApiResponse({ status: 201, description: 'User created' })
+  @ApiResponse({
+    status: 201,
+    description: 'User created',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string' },
+                email: { type: 'string' },
+                first_name: { type: 'string' },
+                last_name: { type: 'string' },
+                avatar: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @Post('users')
   async create(@Body() createUserDto: CreateUserDto, @Res() res: Response) {
@@ -45,6 +67,25 @@ export class UsersController {
   @ApiResponse({
     status: 200,
     description: 'OK',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            user: {
+              type: 'object',
+              properties: {
+                id: { type: 'string' },
+                email: { type: 'string' },
+                first_name: { type: 'string' },
+                last_name: { type: 'string' },
+                avatar: { type: 'string' },
+              },
+            },
+          },
+        },
+      },
+    },
   })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Not Found' })
@@ -57,7 +98,22 @@ export class UsersController {
       res.status(error?.status || 400).json({ message: error.message });
     }
   }
-  @ApiResponse({ status: 200, description: 'OK' })
+  @ApiResponse({
+    status: 200,
+    description: 'OK',
+    content: {
+      'application/json': {
+        schema: {
+          type: 'object',
+          properties: {
+            avatar: {
+              type: 'string',
+            },
+          },
+        },
+      },
+    },
+  })
   @ApiResponse({ status: 400, description: 'Bad request' })
   @ApiResponse({ status: 404, description: 'Not Found' })
   @Get('user/:id/avatar')

@@ -1,7 +1,6 @@
 import { HttpService } from '@nestjs/axios';
 import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
-import fs from 'fs';
 
 interface IFindByIdResponse {
   data: {
