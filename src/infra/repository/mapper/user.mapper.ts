@@ -15,7 +15,7 @@ export class UserMapper {
     });
   }
 
-  static toInfra(user: User): UserSchema {
+  static toInfra(user: Partial<User>): UserSchema {
     const userSchema: UserSchema = {
       first_name: user.firstName.value,
       last_name: user.lastName.value,

@@ -1,6 +1,7 @@
 import { InjectQueue } from '@nestjs/bull';
 import { Injectable } from '@nestjs/common';
 import { Queue } from 'bull';
+import Error409 from '~/helpers/errors/409.error';
 import { IUserRepository } from '~/infra/repository/user/IUserRepository';
 import { CreateUserDto } from '../dto/create-user.dto';
 import { Email } from '../entities/email.entity';
@@ -24,6 +25,11 @@ export class CreateUser {
       first_name: new Username(createUserDto.first_name),
       last_name: new Username(createUserDto.last_name),
     });
+
+    const alreadyExis = await this.userRepository.findByEmail(user.email.value);
+    if (alreadyExis) {
+      throw new Error409('Email duplicated');
+    }
 
     user.createUser();
     const userCreated = await this.userRepository.create(user);

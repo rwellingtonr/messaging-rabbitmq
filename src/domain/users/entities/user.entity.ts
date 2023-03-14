@@ -1,7 +1,7 @@
 import { Email } from './email.entity';
 import { Username } from './userName.entity';
 
-interface UserProps {
+export interface UserProps {
   id?: string;
   first_name: Username;
   last_name: Username;

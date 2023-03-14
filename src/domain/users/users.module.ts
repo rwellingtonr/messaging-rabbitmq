@@ -8,6 +8,8 @@ import { GetUserById } from './use-cases/getUserById';
 import { UsersController } from './users.controller';
 import { BullModule } from '@nestjs/bull';
 import { sendMailConsumer } from './jobs/send-email-consumer';
+import { GetImageByUserId } from './use-cases/getImageByUserId';
+import { RemoveAvatar } from './use-cases/remove.avatar';
 
 @Module({
   controllers: [UsersController],
@@ -18,6 +20,12 @@ import { sendMailConsumer } from './jobs/send-email-consumer';
       name: 'sendMail-queue',
     }),
   ],
-  providers: [CreateUser, GetUserById, sendMailConsumer],
+  providers: [
+    CreateUser,
+    GetUserById,
+    RemoveAvatar,
+    GetImageByUserId,
+    sendMailConsumer,
+  ],
 })
 export class UsersModule {}
