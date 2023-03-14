@@ -1,11 +1,20 @@
 # Backend task
 
-## Motivation
+## Feature
+
+- CREATE: create an user an send an email. Missing the implementation with RabbitMQ
+- GET by id: retrieve the user from https://reqres.in
+- GET avatar: retrieve the user from https://reqres.in and save the image content as base64 in the system
+- REMOVE avatar: remove the avatar from an exiting user
 
 ## Manually test
 
 Into the docs folder there is the insomnia json file, which can help you to test the application.
 Importing this file, all the HTTP routes will show up in your insomnia application
+
+# Documentation
+
+To see more details about the application, when the app is running you can access the url: http://localhost:3000/api/documentation and see the Swagger file
 
 ## Run locally
 
