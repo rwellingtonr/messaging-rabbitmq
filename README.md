@@ -26,7 +26,7 @@ npm i
 cp .env.example .env
 
 # run the docker-compose
-docker-compose up -d .
+docker-compose up -d
 
 # run the tests (optional)
 npm run test
@@ -38,3 +38,15 @@ npm run build
 npm run start:prod
 
 ```
+
+# Technologies
+
+- Axios
+- Docker Compose
+- Class Validator
+- Jest
+- Mongoose
+- NestJS
+- Nodemailer
+- RabbitMQ
+- TypeScrypt
