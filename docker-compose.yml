@@ -4,6 +4,14 @@ services:
     image: mongo
     ports:
       - '27017:27017'
+  rabbitmq:
+    image: rabbitmq:3.11-management
+    ports:
+      - '15672:15672'
+      - '5672:5672'
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
 
   cache:
     image: redis:7-alpine
