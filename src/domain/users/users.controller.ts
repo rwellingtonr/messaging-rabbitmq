@@ -8,6 +8,12 @@ import {
   Res,
   HttpStatus,
 } from '@nestjs/common';
+import {
+  Ctx,
+  MessagePattern,
+  Payload,
+  RmqContext,
+} from '@nestjs/microservices';
 
 import { ApiResponse, ApiTags } from '@nestjs/swagger';
 
@@ -18,6 +24,7 @@ import { CreateUser } from './use-cases/create.user';
 import { GetImageByUserId } from './use-cases/getImageByUserId';
 import { GetUserById } from './use-cases/getUserById';
 import { RemoveAvatar } from './use-cases/remove.avatar';
+import { SendEmail, SendEmailProps } from './use-cases/sendEmail';
 
 @ApiTags('Users')
 @Controller('api')
@@ -27,6 +34,7 @@ export class UsersController {
     private readonly getUserById: GetUserById,
     private readonly getImageByUserId: GetImageByUserId,
     private readonly removeAvatar: RemoveAvatar,
+    private readonly sendEmail: SendEmail,
   ) {}
 
   @ApiResponse({
@@ -137,5 +145,13 @@ export class UsersController {
     } catch (error) {
       res.status(error?.status || 400).json({ message: error?.message });
     }
+  }
+
+  @MessagePattern('created-user')
+  async handleSendEmail(
+    @Payload() data: SendEmailProps,
+    @Ctx() context: RmqContext,
+  ) {
+    await this.sendEmail.execute(data);
   }
 }

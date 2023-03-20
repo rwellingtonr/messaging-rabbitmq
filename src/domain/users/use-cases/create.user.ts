@@ -1,7 +1,6 @@
-import { InjectQueue } from '@nestjs/bull';
 import { Inject, Injectable } from '@nestjs/common';
 import { ClientProxy } from '@nestjs/microservices';
-import { Queue } from 'bull';
+
 import Error409 from '~/helpers/errors/409.error';
 import { IUserRepository } from '~/infra/repository/user/IUserRepository';
 import { CreateUserDto } from '../dto/create-user.dto';
@@ -17,7 +16,6 @@ interface CreateUserResponse {
 export class CreateUser {
   constructor(
     private readonly userRepository: IUserRepository,
-    @InjectQueue('sendMail-queue') private queue: Queue,
     @Inject('MESSAGE') private clientRabbit: ClientProxy,
   ) {}
 
@@ -35,19 +33,14 @@ export class CreateUser {
 
     user.createUser();
     const userCreated = await this.userRepository.create(user);
-    this.clientRabbit
-      .emit(
-        'created-user',
-        `username ${user.firstName.value} ${user.lastName.value}`,
-      )
-      .subscribe({
-        complete: () => console.log('ok'),
-        error: (err) => console.error(err),
-      });
-    await this.queue.add('sendMail-job', {
+
+    this.clientRabbit.emit('created-user', {
       email: user.email.value,
       firstName: user.firstName.value,
     });
+
+    console.log('Created user!');
+
     return {
       user: userCreated,
     };
